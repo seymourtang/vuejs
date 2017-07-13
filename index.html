@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>First Vue.js Web App</title>
+         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="src/css/site.css">
+    </head>
+    <body>
+        <div class="container">
+        <div id="app">
+            {{ message }}
+            {{ info }}
+        </div>
+        <br>
+        <div id="app2">
+            <span v-bind:title='message'>
+                稍等一会儿!
+            </span>
+        </div>
+        <br>
+        <div id="app3">
+            <transition name='fade'>
+             <p v-if='seen'>你看了我!</p>
+            </transition>           
+        </div>
+        <div id="app2">
+            <span v-bind:title='message'>
+                稍等一会儿!
+            </span>
+        </div>
+        <div id="example-side">
+            <button class="btn btn-primary" @click="show=!show">
+                Toggle render
+            </button>
+            <transition name="side-fade">
+                <p v-if="show">Hello</p>
+            </transition>
+        </div>
+        <div id="app4">
+            <ol>
+                <li v-for="todo in todos">
+                    {{ todo.text }}
+                </li>
+            </ol>
+        </div>
+        <div id="app5">
+            <p>{{ message }} </p>
+            <button class="btn btn-primary" v-on:click='reverseMessage'>逆转消息</button>
+        </div>
+        <div id="app6" class="row">
+            <p> {{ message }} </p>
+            <input type="text" class="form-control col-md-3" v-model="message"/>
+        </div>
+        <div id="app7">
+            <ol>
+                <todo-item 
+                    v-for='item in groceryList'
+                    v-bind:todo='item'
+                    v-bind:key='item.id'
+                ></todo-item>
+            </ol>
+        </div>
+        </div>
+    </body>
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+   <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="src/js/vue.js"></script>
+    <script>
+        //声明式渲染
+        var app =new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello World!',
+                info: 'Where are you?'
+            }
+        })
+        var app2=new Vue({
+            el: '#app2',
+            data: {
+                message: '页面加载于'+new Date().getUTCFullYear()
+            }
+        })
+        //条件
+        var app3 =new Vue({
+            el: '#app3',
+            data: {
+                seen: true
+            }
+        })
+        new Vue({
+            el: '#example-side',
+            data: {
+                show: true
+            }
+        })
+        //循环
+        var app4=new Vue({
+            el: '#app4',
+            data: {
+                todos: [
+                    { text: '学习JavaScript项目' },
+                    { text: '学习Vue' },
+                    { text: '整个项目' }
+                ]
+            }
+        })
+        //字符逆转
+        var app5=new Vue({
+            el: '#app5',
+            data: {
+                message: 'I love You'
+            },
+            methods:{
+                reverseMessage: function(){
+                    //split() 方法用于把一个字符串分割成字符串数组。
+                    //join()方法把一个字符串数组合并为一个字符串
+                    this.message=this.message.split(' ').reverse().join(' ')
+                    
+                }
+            }
+        })
+        //text与input绑定
+        var app6=new Vue({
+            el: '#app6',
+            data:{
+                message:'Hello Vue.js'
+            }
+        })
+
+        Vue.component('todo-item',{
+            props: ['todo'],
+            template: '<li>{{ todo.text }}</li>'
+        })
+        var app7=new Vue({
+            el: '#app7',
+            data:{
+                groceryList: [
+                    { id:0,text: '蔬菜' },
+                    { id:1,text: '奶酪' },
+                    { id:2,text: '其他东西' }
+                ]
+            }
+        })
+    </script>
+</html>
