@@ -1,35 +1,38 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>First Vue.js Web App</title>
-         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="src/css/site.css">
-    </head>
-    <body>
-        <div class="container">
+
+<head>
+    <meta charset="UTF-8">
+    <title>First Vue.js Web App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="src/css/site.css">
+</head>
+
+<body>
+    <div class="container">
         <div id="app">
-            {{ message }}
-            {{ info }}
+            {{ message }} {{ info }}
         </div>
-        <br>
+        <hr>
         <div id="app2">
             <span v-bind:title='message'>
                 稍等一会儿!
             </span>
         </div>
-        <br>
+        <hr>
         <div id="app3">
             <transition name='fade'>
-             <p v-if='seen'>你看了我!</p>
-            </transition>           
+                <p v-if='seen'>你看了我!</p>
+            </transition>
         </div>
+        <hr>
         <div id="app2">
             <span v-bind:title='message'>
                 稍等一会儿!
             </span>
         </div>
+        <hr>
         <div id="example-side">
             <button class="btn btn-primary" @click="show=!show">
                 Toggle render
@@ -38,6 +41,7 @@
                 <p v-if="show">Hello</p>
             </transition>
         </div>
+        <hr>
         <div id="app4">
             <ol>
                 <li v-for="todo in todos">
@@ -45,104 +49,190 @@
                 </li>
             </ol>
         </div>
+        <hr>
         <div id="app5">
             <p>{{ message }} </p>
             <button class="btn btn-primary" v-on:click='reverseMessage'>逆转消息</button>
         </div>
-        <div id="app6" class="row">
+        <hr>
+        <div id="app6">
             <p> {{ message }} </p>
-            <input type="text" class="form-control col-md-3" v-model="message"/>
+            <input type="text" class="form-control" v-model="message" />
         </div>
+        <hr>
         <div id="app7">
             <ol>
-                <todo-item 
-                    v-for='item in groceryList'
-                    v-bind:todo='item'
-                    v-bind:key='item.id'
-                ></todo-item>
+                <todo-item v-for='item in groceryList' v-bind:todo='item' v-bind:key='item.id'></todo-item>
             </ol>
         </div>
+        <hr>
+        <div id="app9">
+            <p>{{ message }}</p>
+            <p>{{ message|toupper }}</p>
+            <p>Vue.js 现在的学习进度是：{{ num | topercentage }}</p>
         </div>
-    </body>
-    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
-   <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="src/js/vue.js"></script>
-    <script>
-        //声明式渲染
-        var app =new Vue({
-            el: '#app',
-            data: {
-                message: 'Hello World!',
-                info: 'Where are you?'
+        <hr>
+        <div id="app10">
+            <p>转换之前的价格是{{ price }}</p>
+            <p>转换为税收后为{{ prirceTax }} </p>
+            <p>转换为人民币RMB后的价格是：{{ priceToRMB }}</p>
+        </div>
+        <hr>
+        <div id="app11">
+            <p>之前的价格是{{ price==''?0:price }},需要税收{{ prirceTax}}，最终需要的是{{ priceAfter }}</p>
+            <input type="text" class="form-control" v-model="price" placeholder="输入价格" />
+        </div>
+        <hr>
+    </div>
+</body>
+<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="src/js/vue.js"></script>
+<script>
+    //声明式渲染
+    var app = new Vue({
+        el: '#app',
+        data: {
+            message: '<span style="color:red;">啊啊啊啊</span>',
+            info: 'Where are you?'
+        }
+    })
+    var app2 = new Vue({
+        el: '#app2',
+        data: {
+            message: '页面加载于' + new Date().getUTCFullYear()
+        }
+    })
+    //条件
+    var app3 = new Vue({
+        el: '#app3',
+        data: {
+            seen: true
+        }
+    })
+    new Vue({
+        el: '#example-side',
+        data: {
+            show: true
+        }
+    })
+    //循环
+    var app4 = new Vue({
+        el: '#app4',
+        data: {
+            todos: [
+                { text: '学习JavaScript项目' },
+                { text: '学习Vue' },
+                { text: '整个项目' }
+            ]
+        }
+    })
+    //字符逆转
+    var app5 = new Vue({
+        el: '#app5',
+        data: {
+            message: 'I love You'
+        },
+        methods: {
+            reverseMessage: function () {
+                //split() 方法用于把一个字符串分割成字符串数组。
+                //join()方法把一个字符串数组合并为一个字符串
+                this.message = this.message.split(' ').reverse().join(' ')
+
             }
-        })
-        var app2=new Vue({
-            el: '#app2',
-            data: {
-                message: '页面加载于'+new Date().getUTCFullYear()
-            }
-        })
-        //条件
-        var app3 =new Vue({
-            el: '#app3',
-            data: {
-                seen: true
-            }
-        })
-        new Vue({
-            el: '#example-side',
-            data: {
-                show: true
-            }
-        })
-        //循环
-        var app4=new Vue({
-            el: '#app4',
-            data: {
-                todos: [
-                    { text: '学习JavaScript项目' },
-                    { text: '学习Vue' },
-                    { text: '整个项目' }
-                ]
-            }
-        })
-        //字符逆转
-        var app5=new Vue({
-            el: '#app5',
-            data: {
-                message: 'I love You'
+        }
+    })
+    //text与input绑定
+    var app6 = new Vue({
+        el: '#app6',
+        data: {
+            message: 'Hello Vue.js'
+        }
+    })
+    //组件化应用构建
+    Vue.component('todo-item', {
+        props: ['todo'],
+        template: '<li>{{ todo.text }}</li>'
+    })
+    var app7 = new Vue({
+        el: '#app7',
+        data: {
+            groceryList: [
+                { id: 0, text: '蔬菜' },
+                { id: 1, text: '奶酪' },
+                { id: 2, text: '其他东西' },
+                { id: 3, text: '测试' }
+            ]
+        }
+    })
+    //实例的生命周期 使用了created,updated两个例子
+    var app8 = new Vue({
+        data: {
+            a: 2
+        },
+        created: function () {
+            console.log('This Vue is created!')
+        },
+        updated: function () {
+            console.log('This Vue is updated!')
+        }
+    })
+    //过滤器
+    var app9 = new Vue({
+        el: '#app9',
+        data: {
+            message: 'Vue.js 过滤器filters',
+            num: 0.3
+        },
+        filters: {
+            toupper: function (value) {
+                return value.toUpperCase();
             },
-            methods:{
-                reverseMessage: function(){
-                    //split() 方法用于把一个字符串分割成字符串数组。
-                    //join()方法把一个字符串数组合并为一个字符串
-                    this.message=this.message.split(' ').reverse().join(' ')
-                    
+            topercentage: function (value) {
+                return value * 100 + '%';
+            }
+        }
+    })
+
+    //计算属性
+    var app10 = new Vue({
+        el: '#app10',
+        data: {
+            price: 120
+        },
+        computed: {
+            prirceTax: function () {
+                return this.price + 200;
+            },
+            priceToRMB: function () {
+                return this.price / 16.75;
+            }
+        }
+    })
+
+    //观察监视属性
+    var app11 = new Vue({
+        el: '#app11',
+        data: {
+            price: '',
+            prirceTax: 0,
+            priceAfter: 0,
+        },
+        watch: {
+            price: function (newVal, oldVal) {
+                console.log(newVal, oldVal);
+                if (this.price == ''||this.price==0) {
+                    this.prirceTax = 0;
+                    this.priceAfter = 0;
+                }
+                else {
+                    this.prirceTax = this.price + 50;
+                    this.priceAfter = this.price * 0.6 + 16;
                 }
             }
-        })
-        //text与input绑定
-        var app6=new Vue({
-            el: '#app6',
-            data:{
-                message:'Hello Vue.js'
-            }
-        })
+        },
+    })
 
-        Vue.component('todo-item',{
-            props: ['todo'],
-            template: '<li>{{ todo.text }}</li>'
-        })
-        var app7=new Vue({
-            el: '#app7',
-            data:{
-                groceryList: [
-                    { id:0,text: '蔬菜' },
-                    { id:1,text: '奶酪' },
-                    { id:2,text: '其他东西' },
-                    { id:3,text: '测试' }
-                ]
-            }
-        })
-    </script>
+</script>
+
 </html>
