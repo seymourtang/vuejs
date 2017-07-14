@@ -81,12 +81,29 @@
         <div id="app11">
             <p>之前的价格是{{ price==''?0:price }},需要税收{{ prirceTax}}，最终需要的是{{ priceAfter }}</p>
             <input type="text" class="form-control" v-model="price" placeholder="输入价格" />
+            <p>你的姓是{{ firstName}},名是{{ lastName }}</p>
+            <input type="text" class="form-control" v-model='fullName' placeholder='请输入名字'>
         </div>
         <hr>
+        <div id="app12">
+            <p>当前已经输入了{{ message.length }}个字符.</p>
+            <textarea type="text" class="form-control" v-model='message' placeholder="请输入字符"></textarea>
+        </div>
+        <hr>
+        <div id="app13">
+            <p>问我一个问题吧！:)</p>
+            <input type="text" class="form-control" v-model='question'>
+            <p>{{answer}}</p>
+        </div>
+        <hr>
+
+            <p id="app14" v-bind:style='styleObject'>CLICK ME</p>
     </div>
 </body>
 <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
+<script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
 <script src="src/js/vue.js"></script>
 <script>
     //声明式渲染
@@ -217,11 +234,25 @@
             price: '',
             prirceTax: 0,
             priceAfter: 0,
+            firstName: 'aa',
+            lastName: 'bbb'
+        },
+        computed: {
+            fullName: {
+                get: function () {
+                    return this.firstName + ' ' + this.lastName;
+                },
+                set: function (newVal) {
+                    var names = newVal.split(' ');
+                    this.firstName = names[0];
+                    this.lastName = names[1];
+                }
+            }
         },
         watch: {
             price: function (newVal, oldVal) {
                 console.log(newVal, oldVal);
-                if (this.price == ''||this.price==0) {
+                if (this.price == '' || this.price == 0) {
                     this.prirceTax = 0;
                     this.priceAfter = 0;
                 }
@@ -232,7 +263,64 @@
             }
         },
     })
+    //检测输入字符的长度
+    var app12 = new Vue({
+        el: '#app12',
+        data: {
+            message: '',
+            length: 0
+        },
+        /*         watch:{
+                    message:function(){
+                        this.length=this.message.length;
+                    }
+                } */
+    })
 
+    //观察Watchers
+    var app13=new Vue({
+        el:'#app13',
+        data:{
+            question:'',
+            answer:'先问我一个问题吧!'
+        },
+        watch:{
+            question:function(newQuestion){
+                this.answer='聆听中...';
+                this.getAnswer();
+            }
+        },
+        methods:{
+            getAnswer: _.debounce(
+                function(){
+                    if (this.question.length==0) {
+                        this.answer='先问我一个问题吧!';
+                        return;
+                    } 
+                    this.answer='思考中...';
+                    var vm=this;
+                    axios.get('https://yesno.wtf/api')
+                        .then(function (response) {
+                            vm.answer=_.capitalize(response.data.answer)
+                        })
+                        .catch(function (error) {
+                            vm.answer='出错了\n'+error;
+                        })
+                },
+                500
+            )
+        }
+    })
+    //对象语法
+    var app14=new Vue({
+        el:'#app14',
+        data:{
+            styleObject:{
+                color:'red',
+                fontSize:'13px'
+            }
+        },
+    })
 </script>
 
 </html>
